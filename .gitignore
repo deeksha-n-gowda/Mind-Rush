@@ -1,0 +1,51 @@
+# ===== Unity =====
+/Library/
+/obj/
+/Logs/
+/UserSettings/
+/Builds/
+/Build/
+/*.csproj
+/*.sln
+/*.slnx
+/*.userprefs
+/*.pidb
+/*.suo
+/*.user
+/*.unityproj
+/*.booproj
+/.vs/
+/.vscode/
+/*.pidb
+/*.meta
+!/Assets/**/*.meta
+!/Packages/**/*.meta
+/ProjectSettings/ProjectVersion.txt
+
+# ===== Python / Flask =====
+/backend/__pycache__/
+/backend/*.pyc
+/backend/.pytest_cache/
+/backend/.coverage
+/backend/venv/
+/backend/.env
+/backend/.env.local
+/backend/*.log
+/backend/instance/
+
+# ===== Docker =====
+/backend/data/
+/backend/mongodb_data/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ===== IDE =====
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
