@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+venv/
+.env
+.env.local
+*.log
+instance/
+data/
+mongodb_data/
+.git/
+.gitignore
+README.md
