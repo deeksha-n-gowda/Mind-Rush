@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from app.models import DailyChallenge, Player
+from app import mongo
 
 bp = Blueprint("mimi", __name__)
 
@@ -117,7 +118,7 @@ def get_daily_challenges():
     if not player_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    challenge_model = DailyChallenge(current_app.mongo)
+    challenge_model = DailyChallenge(mongo)
     progress = challenge_model.get_all_progress(player_id)
 
     return jsonify(progress), 200
@@ -128,14 +129,14 @@ def claim_daily_challenge(challenge_index: int):
     if not player_id:
         return jsonify({"error": "Unauthorized"}), 401
 
-    challenge_model = DailyChallenge(current_app.mongo)
+    challenge_model = DailyChallenge(mongo)
     result = challenge_model.claim_reward(player_id, challenge_index)
 
     if "error" in result:
         return jsonify(result), 400
 
     # Award XP to player
-    player_model = Player(current_app.mongo)
+    player_model = Player(mongo)
     player_model.add_experience(player_id, result["reward_xp"])
 
     return jsonify({

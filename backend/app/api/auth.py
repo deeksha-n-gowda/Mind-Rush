@@ -3,11 +3,12 @@ import jwt
 import datetime
 import os
 from app.models import Player
+from app import mongo
 
 bp = Blueprint("auth", __name__)
 
 def get_player_model():
-    return Player(current_app.mongo)
+    return Player(mongo)
 
 def generate_token(player_id: str) -> str:
     payload = {

@@ -1,13 +1,14 @@
 from flask import Blueprint, request, jsonify, current_app
 from app.models import Character, Player
+from app import mongo
 
 bp = Blueprint("characters", __name__)
 
 def get_character_model():
-    return Character(current_app.mongo)
+    return Character(mongo)
 
 def get_player_model():
-    return Player(current_app.mongo)
+    return Player(mongo)
 
 def get_current_player_id() -> str | None:
     auth_header = request.headers.get("Authorization", "")

@@ -1,13 +1,14 @@
 from flask import Blueprint, request, jsonify, current_app
 from app.models import Score, Character
+from app import mongo
 
 bp = Blueprint("leaderboard", __name__)
 
 def get_score_model():
-    return Score(current_app.mongo)
+    return Score(mongo)
 
 def get_character_model():
-    return Character(current_app.mongo)
+    return Character(mongo)
 
 @bp.route("", methods=["GET"])
 def get_leaderboard():
