@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CyberpunkRunner.Environment
+namespace MindRush.Environment
 {
     /// <summary>
     /// Procedural Track Spawner using Object Pooling (Queue-based recycling).

@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using CyberpunkRunner.Player;
+using MindRush.Player;
 
-namespace CyberpunkRunner.Core
+namespace MindRush.Core
 {
     public class GameOverUI : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CyberpunkRunner.Core
+namespace MindRush.Core
 {
     /// <summary>
     /// Smooth third-person camera follower.

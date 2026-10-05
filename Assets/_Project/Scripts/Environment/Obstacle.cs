@@ -1,7 +1,7 @@
 using UnityEngine;
-using CyberpunkRunner.Player;
+using MindRush.Player;
 
-namespace CyberpunkRunner.Environment
+namespace MindRush.Environment
 {
     /// <summary>
     /// Attached to track barriers/obstacles.
