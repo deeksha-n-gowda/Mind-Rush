@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CyberpunkRunner.Player
+namespace MindRush.Player
 {
     /// <summary>
     /// Core Player Controller: Manages state machine, 3-lane movement, forward progression, and physics.

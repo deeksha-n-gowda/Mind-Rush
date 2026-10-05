@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CyberpunkRunner.Player
+namespace MindRush.Player
 {
     /// <summary>
     /// Represents the Dead state when colliding with an obstacle.

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace CyberpunkRunner.Player
+namespace MindRush.Player
 {
     /// <summary>
     /// Represents the Sliding (crouching) state of the player.

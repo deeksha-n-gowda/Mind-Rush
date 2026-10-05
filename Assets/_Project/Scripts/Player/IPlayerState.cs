@@ -1,4 +1,4 @@
-namespace CyberpunkRunner.Player
+namespace MindRush.Player
 {
     /// <summary>
     /// Contract for all player movement states (State Pattern).

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-namespace CyberpunkRunner.Player
+namespace MindRush.Player
 {
     /// <summary>
     /// Represents the default Running state of the player.
