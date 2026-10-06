@@ -10,6 +10,10 @@ namespace MindRush.Environment
     [RequireComponent(typeof(Collider))]
     public class Obstacle : MonoBehaviour
     {
+        [Header("Obstacle Type")]
+        [Tooltip("Identifier for this obstacle type (used for death cause tracking)")]
+        [SerializeField] private string obstacleType = "obstacle";
+
         private void Awake()
         {
             // Ensure the collider is configured as a trigger for crisp arcade collision
@@ -24,6 +28,7 @@ namespace MindRush.Environment
                 PlayerController player = other.GetComponent<PlayerController>();
                 if (player != null)
                 {
+                    player.SetCauseOfDeath(obstacleType);
                     player.Die();
                 }
             }

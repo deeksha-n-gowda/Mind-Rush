@@ -1,4 +1,5 @@
 using UnityEngine;
+using MindRush.Network;
 
 namespace MindRush.Player
 {
@@ -40,6 +41,10 @@ namespace MindRush.Player
         [Tooltip("Collider center Y while sliding (keeps bottom pinned to ground)")]
         [SerializeField] private float slideCenterY = -0.5f;
 
+        [Header("Run Tracking")]
+        [Tooltip("Starting Z position for distance calculation")]
+        [SerializeField] private float startZ = 0f;
+
         // Current lane: 0 = Left (-3), 1 = Center (0), 2 = Right (+3)
         private int currentLane = 1;
 
@@ -53,6 +58,12 @@ namespace MindRush.Player
         private Vector3 originalScale;
         private bool isSliding = false;
 
+        // Run statistics
+        private float runStartTime;
+        private int ideasCollected = 0;
+        private int gemsCollected = 0;
+        private string causeOfDeath = "unknown";
+
         // State Machine
         private IPlayerState currentState;
         public readonly RunningState RunningState = new RunningState();
@@ -61,6 +72,13 @@ namespace MindRush.Player
 
         // Event fired when player hits an obstacle (Observer Pattern for decoupled UI/Audio)
         public event System.Action OnPlayerDied;
+
+        // Properties for external access
+        public float DistanceTraveled => transform.position.z - startZ;
+        public int IdeasCollected => ideasCollected;
+        public int GemsCollected => gemsCollected;
+        public float PlaytimeSeconds => Time.time - runStartTime;
+        public float CurrentSpeed => forwardSpeed;
 
         private void Awake()
         {
@@ -75,6 +93,8 @@ namespace MindRush.Player
         private void Start()
         {
             // Initial state is Running
+            runStartTime = Time.time;
+            startZ = transform.position.z;
             TransitionToState(RunningState);
         }
 
@@ -172,6 +192,30 @@ namespace MindRush.Player
         public bool IsSliding => isSliding;
 
         /// <summary>
+        /// Call when player collects an Idea Lightbulb
+        /// </summary>
+        public void CollectIdea()
+        {
+            ideasCollected++;
+        }
+
+        /// <summary>
+        /// Call when player collects a Focus Gem
+        /// </summary>
+        public void CollectGem()
+        {
+            gemsCollected++;
+        }
+
+        /// <summary>
+        /// Sets the cause of death for score submission
+        /// </summary>
+        public void SetCauseOfDeath(string cause)
+        {
+            causeOfDeath = cause;
+        }
+
+        /// <summary>
         /// Computes frame movement across X (lane lerp), Y (gravity/jump), and Z (forward dash).
         /// </summary>
         private void ApplyMovement()
@@ -223,6 +267,7 @@ namespace MindRush.Player
 
         /// <summary>
         /// Triggers player death, transitions to DeadState, and invokes OnPlayerDied event.
+        /// Submits score to backend if authenticated.
         /// </summary>
         public void Die()
         {
@@ -231,8 +276,70 @@ namespace MindRush.Player
             {
                 StopSlide();
             }
+            
+            // Calculate final stats before stopping
+            int finalScore = CalculateScore();
+            int finalDistance = Mathf.RoundToInt(DistanceTraveled);
+            int finalPlaytime = Mathf.RoundToInt(PlaytimeSeconds);
+            string equippedChar = GetEquippedCharacter();
+
             TransitionToState(DeadState);
             OnPlayerDied?.Invoke();
+
+            // Submit score to backend (async, fire-and-forget)
+            SubmitScoreToBackend(finalScore, finalDistance, finalPlaytime, equippedChar);
+        }
+
+        private int CalculateScore()
+        {
+            // Base score from distance + bonuses
+            int distanceScore = Mathf.RoundToInt(DistanceTraveled);
+            int ideaBonus = ideasCollected * 50;
+            int gemBonus = gemsCollected * 200;
+            int speedBonus = Mathf.RoundToInt((forwardSpeed - 8f) * 10f); // Bonus for maintaining high speed
+            
+            return distanceScore + ideaBonus + gemBonus + speedBonus;
+        }
+
+        private string GetEquippedCharacter()
+        {
+            if (AuthManager.Instance != null && AuthManager.Instance.CurrentPlayer != null)
+            {
+                return AuthManager.Instance.CurrentPlayer.equipped_character;
+            }
+            return "aura";
+        }
+
+        private async void SubmitScoreToBackend(int score, int distance, int playtime, string characterUsed)
+        {
+            if (ScoreService.Instance != null && AuthManager.Instance != null && AuthManager.Instance.IsLoggedIn)
+            {
+                try
+                {
+                    await ScoreService.Instance.SubmitScore(score, distance, ideasCollected, gemsCollected, 
+                        playtime, characterUsed, causeOfDeath, (success, msg) => 
+                    {
+                        if (success)
+                        {
+                            Debug.Log($"[PlayerController] Score submitted: {score}");
+                            
+                            // Trigger Mimi commentary for milestone
+                            if (MimiService.Instance != null)
+                            {
+                                MimiService.Instance.OnMilestoneReached(distance, score, ideasCollected, gemsCollected, characterUsed);
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[PlayerController] Score submission failed: {msg}");
+                        }
+                    });
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"[PlayerController] Score submission error: {e.Message}");
+                }
+            }
         }
     }
 }
