@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_MyelinSheath
+  m_Shader: {fileID: 4800000, guid: 9f9b6d6c3f5b5e5b9c9d9e9f9a9b9c9d, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableGPUInstancing: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  m_TextureParams:
+    - m_Name: _BaseColor
+      m_Texture: {fileID: 0}
+      m_Scale: {x: 1, y: 1}
+      m_Offset: {x: 0, y: 0}
+    - m_Name: _EmissionColor
+      m_Texture: {fileID: 0}
+      m_Scale: {x: 1, y: 1}
+      m_Offset: {x: 0, y: 0}
+    - m_Name: _NormalMap
+      m_Texture: {fileID: 0}
+      m_Scale: {x: 1, y: 1}
+      m_Offset: {x: 0, y: 0}
+  m_SavedProperties:
+    m_TexEnvs: []
+    m_Floats:
+      - m_Name: _EmissionIntensity
+        m_Value: 1.0
+      - m_Name: _SegmentWidth
+        m_Value: 2.0
+      - m_Name: _GapWidth
+        m_Value: 0.3
+      - m_Name: _PulseSpeed
+        m_Value: 1.5
+      - m_Name: _Glossiness
+        m_Value: 0.9
+      - m_Name: _Metallic
+        m_Value: 0.0
+      - m_Name: _NormalScale
+        m_Value: 0.5
+      - m_Name: _Iridescence
+        m_Value: 0.3
+    m_Colors:
+      - m_Name: _BaseColor
+        m_Value: {r: 0.9, g: 0.85, b: 0.95, a: 1.0}
+      - m_Name: _EmissionColor
+        m_Value: {r: 0.3, g: 0.1, b: 0.5, a: 1.0}
+  m_BuildTextureStacks: []
